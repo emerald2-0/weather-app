@@ -11,13 +11,38 @@ if ('serviceWorker' in navigator) {
 
 
 
+
 //Open Weather Call
-var button = document.querySelector('.button')
-var uservalue = document.querySelector('.uservalue')
-var name = document.querySelector('.name')
-var desc = document.querySelector('.desc')
-var temp = document.querySelector('.temp')
-var country = document.querySelector('.country')
+var button = document.querySelector('.button');
+var uservalue = document.querySelector('.uservalue');
+var name = document.querySelector('.name');
+var desc = document.querySelector('.desc');
+var temp = document.querySelector('.temp');
+var country = document.querySelector('.country');
+
+function setData(data){ 
+var DataString = Json.stringify(data);
+localStorage.setItem("weatherForecast", "DataString") ;
+getData();
+showData(); }
+
+function getData(){
+var str= localStorage.getItem("DataString");
+var uiData; 
+return (uiData = Json.parse(str)); }
+
+function showData(){
+getData();
+
+var [    tempResponse, nameResponse,descResponse, CntrResponse ] = uiData;
+
+return(
+name.innerHTML = nameResponse;
+  	temp.innerHTML = tempResponse;
+  	desc.innerHTML = descResponse;
+  	country.innerHTML = CntrResponse;);
+
+}
 
 
 button.addEventListener('click', function(){
@@ -29,12 +54,16 @@ button.addEventListener('click', function(){
   	var descResponse = data['weather'][0]['description'];
   	var CntrResponse = data['sys']['country']
 
-  	name.innerHTML = nameResponse;
-  	temp.innerHTML = tempResponse;
-  	desc.innerHTML = descResponse;
-  	country.innerHTML = CntrResponse;
+var arr = [ ];
+arr.push(nameResponse, tempResponse,  descResponse, CntrResponse) ;
+
+setData(arr);
+
+  	
   })
 
  .catch(err => alert("Wrong City name!"))
 })
 
+
+ 
